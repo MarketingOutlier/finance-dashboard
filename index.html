@@ -3,138 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FinanceAI — Dashboard Financeiro Inteligente</title>
-  <meta name="description" content="Analise seu extrato bancário com IA. Upload de CSV, categorização automática e dicas para melhorar suas finanças pessoais.">
+  <title>Bold Next Agency — Financial Intelligence</title>
+  <meta name="description" content="A inteligência financeira encontra a precisão. Analise seu extrato bancário com IA.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Inter (Headings), Playfair Display (Drama), JetBrains Mono (Data) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  
+  <!-- GSAP & ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
+  <!-- CSS Noise Overlay -->
+  <svg class="noise-overlay" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+  </svg>
+
+  <!-- GSAP Background Particles Container -->
+  <div id="particles-container"></div>
+
   <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
+  <nav class="navbar" id="navbar">
     <div class="nav-brand">
       <div class="nav-logo">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <rect width="28" height="28" rx="8" fill="url(#logo-grad)"/>
-          <path d="M8 10h12M8 14h8M8 18h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
-        </svg>
+        <img src="/logo.png" alt="Bold Next Agency Logo" class="logo-image" />
       </div>
-      <span class="nav-title">Finance<span class="accent">AI</span></span>
+      <span class="nav-title">bold next <span class="accent-text">agency</span></span>
     </div>
     <div class="nav-actions">
-      <button class="btn-nav" id="btnNewAnalysis" style="display:none;">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        Nova Análise
+      <button class="btn-magnetic btn-nav" id="btnNewAnalysis" style="display:none;">
+        <span class="btn-bg"></span>
+        <span class="btn-text">Nova Análise</span>
       </button>
     </div>
   </nav>
 
-  <!-- ===== UPLOAD SCREEN ===== -->
+  <!-- ===== UPLOAD SCREEN (HERO) ===== -->
   <main id="uploadScreen" class="screen upload-screen">
-    <div class="upload-container">
+    <div class="hero-overlay"></div>
+    <div class="upload-container cinematic-container">
+      
       <div class="upload-hero">
-        <div class="hero-icon">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-            <circle cx="32" cy="32" r="30" stroke="url(#hero-grad)" stroke-width="2" stroke-dasharray="6 4"/>
-            <path d="M32 20v16M24 28l8-8 8 8" stroke="url(#hero-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M20 40h24" stroke="url(#hero-grad)" stroke-width="2.5" stroke-linecap="round"/>
-            <defs><linearGradient id="hero-grad" x1="0" y1="0" x2="64" y2="64"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
-          </svg>
-        </div>
-        <h1>Analise suas finanças com <span class="gradient-text">Inteligência Artificial</span></h1>
-        <p class="hero-subtitle">Faça upload do seu extrato bancário em CSV e receba uma análise completa com categorização automática e dicas personalizadas para economizar.</p>
+        <h1 class="hero-title">
+          <span class="strong-sans inline-block">A inteligência financeira</span>
+          <br>
+          <span class="drama-serif inline-block">encontra a precisão.</span>
+        </h1>
+        <p class="hero-subtitle">Processe seu extrato bancário em CSV e deixe a IA categorizar e modelar a saúde financeira da sua operação.</p>
       </div>
 
       <div class="drop-zone" id="dropZone">
         <div class="drop-zone-content">
-          <div class="drop-icon">
+          <div class="drop-icon golden-glow">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <path d="M40 30v4a4 4 0 01-4 4H12a4 4 0 01-4-4v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               <path d="M24 10v20M16 18l8-8 8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <p class="drop-text">Arraste seu arquivo CSV aqui</p>
+          <p class="drop-text">Inicie o protocolo (Arraste o CSV)</p>
           <span class="drop-divider">ou</span>
-          <button class="btn-browse" id="btnBrowse">Selecionar Arquivo</button>
+          <button class="btn-magnetic btn-browse" id="btnBrowse">
+            <span class="btn-bg"></span>
+            <span class="btn-text">Selecionar Arquivo</span>
+          </button>
           <input type="file" id="fileInput" accept=".csv" hidden>
         </div>
         <div class="drop-zone-selected" id="fileSelected" style="display:none;">
           <div class="file-info">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6M10 13h4M10 17h4M8 9h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-            <span id="fileName">arquivo.csv</span>
+            <span id="fileName" class="mono-text">arquivo.csv</span>
           </div>
           <button class="btn-remove" id="btnRemove">✕</button>
         </div>
       </div>
 
-      <button class="btn-analyze" id="btnAnalyze" disabled>
-        <span class="btn-text">Analisar com IA</span>
+      <button class="btn-magnetic btn-analyze main-cta" id="btnAnalyze" disabled>
+        <span class="btn-bg"></span>
+        <span class="btn-text">Processar Relatório</span>
         <span class="btn-loader" style="display:none;">
           <svg class="spinner" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="32" stroke-dashoffset="32"/></svg>
-          Processando...
+          Sincronizando...
         </span>
       </button>
 
-      <div class="upload-features">
-        <div class="feature">
-          <div class="feature-icon">🤖</div>
-          <div class="feature-text">
-            <strong>IA Avançada</strong>
-            <span>Gemini + SerpAPI categorizam cada transação</span>
-          </div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">🔒</div>
-          <div class="feature-text">
-            <strong>Seguro</strong>
-            <span>Seus dados não são armazenados</span>
-          </div>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">💡</div>
-          <div class="feature-text">
-            <strong>Dicas Inteligentes</strong>
-            <span>Recomendações personalizadas para economizar</span>
-          </div>
-        </div>
-      </div>
     </div>
   </main>
 
   <!-- ===== LOADING SCREEN ===== -->
   <main id="loadingScreen" class="screen loading-screen" style="display:none;">
-    <div class="loading-container">
-      <div class="loading-orb">
-        <div class="orb-ring"></div>
-        <div class="orb-ring"></div>
-        <div class="orb-ring"></div>
-        <div class="orb-core">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <path d="M16 4v4M16 24v4M4 16h4M24 16h4M7.5 7.5l2.8 2.8M21.7 21.7l2.8 2.8M7.5 24.5l2.8-2.8M21.7 10.3l2.8-2.8" stroke="white" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
-      <h2 class="loading-title">Analisando suas transações...</h2>
-      <p class="loading-subtitle">A IA está categorizando cada transação. Isso pode levar alguns minutos.</p>
-      <div class="loading-steps">
-        <div class="step active" id="step1">
-          <div class="step-dot"></div>
-          <span>Lendo arquivo CSV</span>
-        </div>
-        <div class="step" id="step2">
-          <div class="step-dot"></div>
-          <span>Identificando transações</span>
-        </div>
-        <div class="step" id="step3">
-          <div class="step-dot"></div>
-          <span>Categorizando com IA</span>
-        </div>
-        <div class="step" id="step4">
-          <div class="step-dot"></div>
-          <span>Gerando dashboard</span>
-        </div>
+    <div class="loading-container luxury-loader">
+      <div class="pulse-ring"></div>
+      <img src="/logo.png" class="loading-logo" alt="Loading" />
+      <h2 class="loading-title drama-serif">Decodificando finanças...</h2>
+      <div class="loading-steps mono-text">
+        <div class="step active" id="step1"><span class="cursor">></span> Extraindo CSV</div>
+        <div class="step" id="step2"><span class="cursor">></span> Modelando Padrões</div>
+        <div class="step" id="step3"><span class="cursor">></span> Aplicando IA</div>
+        <div class="step" id="step4"><span class="cursor">></span> Finalizando Relatório</div>
       </div>
     </div>
   </main>
@@ -142,64 +112,53 @@
   <!-- ===== DASHBOARD SCREEN ===== -->
   <main id="dashboardScreen" class="screen dashboard-screen" style="display:none;">
     <div class="dashboard-container">
+      
       <!-- Header -->
-      <div class="dash-header">
+      <div class="dash-header dash-anim">
         <div>
-          <h1>Dashboard Financeiro</h1>
-          <p class="dash-date" id="dashDate">Análise gerada em --</p>
+          <h1 class="strong-sans text-3xl">Dashboard de Inteligência</h1>
+          <p class="dash-date mono-text text-slate" id="dashDate">SYNCHRONIZED: --</p>
         </div>
       </div>
 
       <!-- Summary Cards -->
       <section class="summary-cards">
-        <div class="card summary-card" data-type="total">
-          <div class="card-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-          </div>
+        <div class="card luxury-card dash-anim" data-type="total">
           <div class="card-content">
-            <span class="card-label">Total Movimentado</span>
-            <span class="card-value" id="totalGeral">R$ 0,00</span>
+            <span class="card-label">Volume Total</span>
+            <span class="card-value mono-text" id="totalGeral">R$ 0,00</span>
           </div>
         </div>
-        <div class="card summary-card" data-type="count">
-          <div class="card-icon" style="background: linear-gradient(135deg, #059669, #34d399);">
-             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
-          </div>
+        <div class="card luxury-card dash-anim" data-type="count">
           <div class="card-content">
-            <span class="card-label">Total Entradas</span>
-            <span class="card-value" id="totalEntradas">R$ 0,00</span>
+            <span class="card-label text-gold">Capital Recebido</span>
+            <span class="card-value mono-text" id="totalEntradas">R$ 0,00</span>
           </div>
         </div>
-        <div class="card summary-card" data-type="avg">
-          <div class="card-icon" style="background: linear-gradient(135deg, #dc2626, #f87171);">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-          </div>
+        <div class="card luxury-card dash-anim" data-type="avg">
           <div class="card-content">
-            <span class="card-label">Total Saídas</span>
-            <span class="card-value" id="totalSaidas">R$ 0,00</span>
+            <span class="card-label text-slate">Capital Distribuído</span>
+            <span class="card-value mono-text" id="totalSaidas">R$ 0,00</span>
           </div>
         </div>
-        <div class="card summary-card" data-type="top">
-          <div class="card-icon" style="background: linear-gradient(135deg, #dc2626, #f87171);">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 17h8M13 12h8M13 7h8M3 17l2 2 4-4M3 12l2 2 4-4M3 7l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
+        <div class="card luxury-card dash-anim" data-type="top">
           <div class="card-content">
-            <span class="card-label">Maior Gasto</span>
-            <span class="card-value" id="maiorGasto">R$ 0,00</span>
+            <span class="card-label text-slate">Maior Passivo</span>
+            <span class="card-value mono-text" id="maiorGasto">R$ 0,00</span>
           </div>
         </div>
       </section>
 
       <!-- Charts Row -->
       <section class="charts-row">
-        <div class="card chart-card">
-          <h3>Gastos por Categoria</h3>
+        <div class="card luxury-card chart-card dash-anim">
+          <h3 class="card-title">Distribuição por Categoria</h3>
           <div class="chart-wrapper">
             <canvas id="chartCategoria"></canvas>
           </div>
         </div>
-        <div class="card chart-card">
-          <h3>Volume por Tipo de Transação</h3>
+        <div class="card luxury-card chart-card dash-anim">
+          <h3 class="card-title">Performance de Caixa</h3>
           <div class="chart-wrapper">
             <canvas id="chartTipo"></canvas>
           </div>
@@ -207,26 +166,26 @@
       </section>
 
       <!-- Top 3 -->
-      <section class="top-gastos">
-        <h3>🏆 Top 3 Maiores Gastos</h3>
+      <section class="top-gastos dash-anim">
+        <h3 class="card-title drama-serif text-2xl mb-4">Principais Passivos</h2>
         <div class="top-cards" id="topGastos"></div>
       </section>
 
       <!-- Dicas de Melhoria -->
-      <section class="dicas-section">
-        <h3>💡 Dicas para Melhorar suas Finanças</h3>
+      <section class="dicas-section dash-anim">
+        <h3 class="card-title drama-serif text-2xl mb-4">Observações Estratégicas</h2>
         <div class="dicas-grid" id="dicasGrid"></div>
       </section>
 
       <!-- Tabela de Transações -->
-      <section class="card transactions-section">
+      <section class="card luxury-card transactions-section dash-anim">
         <div class="transactions-header">
-          <h3>Todas as Transações</h3>
+          <h3 class="card-title">Extrato Detalhado</h3>
           <div class="filters">
-            <select id="filterCategoria" class="filter-select">
+            <select id="filterCategoria" class="filter-select mono-text">
               <option value="">Todas as Categorias</option>
             </select>
-            <select id="filterOrdem" class="filter-select">
+            <select id="filterOrdem" class="filter-select mono-text">
               <option value="valor-desc">Maior valor</option>
               <option value="valor-asc">Menor valor</option>
               <option value="data-desc">Data recente</option>
@@ -235,7 +194,7 @@
           </div>
         </div>
         <div class="table-wrapper">
-          <table class="transactions-table">
+          <table class="transactions-table mono-text">
             <thead>
               <tr>
                 <th>Data</th>
@@ -249,18 +208,31 @@
           </table>
         </div>
       </section>
+
+      <!-- Footer -->
+      <footer class="dash-footer dash-anim">
+        <div class="footer-content">
+          <div class="brand">
+            <img src="/logo.png" class="footer-logo" alt="Bold Next" />
+            <span class="strong-sans">bold next agency</span>
+          </div>
+          <div class="sys-status mono-text">
+            <span class="status-dot"></span> SYSTEM OPERATIONAL
+          </div>
+        </div>
+      </footer>
     </div>
   </main>
 
   <!-- ===== ERROR MODAL ===== -->
   <div class="modal-overlay" id="errorModal" style="display:none;">
-    <div class="modal">
-      <div class="modal-icon error">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2"/><path d="M16 10v8M16 22h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
-      <h3>Ops! Algo deu errado</h3>
-      <p id="errorMessage">Não foi possível processar seu arquivo.</p>
-      <button class="btn-analyze" onclick="document.getElementById('errorModal').style.display='none'">Tentar Novamente</button>
+    <div class="modal luxury-card">
+      <h3 class="drama-serif text-gold text-2xl mb-2">Falha no Protocolo</h3>
+      <p id="errorMessage" class="mono-text text-slate mb-6">Não foi possível processar a matriz de dados.</p>
+      <button class="btn-magnetic btn-analyze" onclick="document.getElementById('errorModal').style.display='none'">
+        <span class="btn-bg"></span>
+        <span class="btn-text">Reconectar</span>
+      </button>
     </div>
   </div>
 

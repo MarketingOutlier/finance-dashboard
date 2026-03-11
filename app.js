@@ -273,6 +273,16 @@ function renderDashboard(data) {
 
   // Transactions table
   renderTransactions(data.transacoes || [], data.gastosPorCategoria || []);
+
+  // Trigger GSAP entrance animation
+  setTimeout(() => {
+    if (window.gsap) {
+      gsap.fromTo('.dash-anim', 
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+      );
+    }
+  }, 100);
 }
 
 // ===== ANIMATE VALUES =====
@@ -648,3 +658,34 @@ function getBadgeClass(tipo) {
   if (t.includes('boleto')) return 'badge-boleto';
   return 'badge-outros';
 }
+
+// ===== GSAP & PARTICLES =====
+function initParticles() {
+  const container = document.getElementById('particles-container');
+  if(!container || !window.gsap) return;
+  const particleCount = 40;
+  for (let i = 0; i < particleCount; i++) {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    const size = Math.random() * 4 + 1;
+    p.style.width = `${size}px`;
+    p.style.height = `${size}px`;
+    p.style.left = `${Math.random() * 100}vw`;
+    p.style.top = `${Math.random() * 100}vh`;
+    container.appendChild(p);
+    
+    gsap.to(p, {
+      y: `-=${Math.random() * 300 + 100}`,
+      x: `+=${Math.random() * 100 - 50}`,
+      opacity: 0,
+      duration: Math.random() * 15 + 10,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+      delay: Math.random() * 5
+    });
+  }
+}
+
+// Initialize particles on start
+setTimeout(initParticles, 500);

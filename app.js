@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 
 // ===== CONFIG =====
-const WEBHOOK_URL = '/api/webhook';
+const WEBHOOK_URL = 'https://n8n.srv1415510.hstgr.cloud/webhook/extrato-bancario';
 
 // ===== DOM ELEMENTS =====
 const uploadScreen = document.getElementById('uploadScreen');
